@@ -1,0 +1,28 @@
+---
+- name: Install Python on EC2 instances
+  hosts: webservers  # Ensure this matches the group name from your inventory
+  become: yes  # Use 'sudo' to gain root access (required for package installation)
+  tasks:
+    - name: Ensure python3 is installed
+      apt:
+        name: python3
+        state: present
+      when: ansible_os_family == "Debian"  # For Ubuntu/Debian-based AMIs
+
+    - name: Ensure python3 is installed (for Amazon Linux)
+      yum:
+        name: python3
+        state: present
+      when: ansible_os_family == "RedHat"  # For Amazon Linux/RHEL-based AMIs
+
+    - name: Ensure pip3 is installed
+      apt:
+        name: python3-pip
+        state: present
+      when: ansible_os_family == "Debian"  # For Ubuntu/Debian-based AMIs
+
+    - name: Ensure pip3 is installed (for Amazon Linux)
+      yum:
+        name: python3-pip
+        state: present
+      when: ansible_os_family == "RedHat"  # For Amazon Linux/RHEL-based AMIs

@@ -1,7 +1,7 @@
 # variables.tf
 variable "ami" {
   description = "Manage node to run Ansible"
-  default     = "ami-053a45fff0a704a47"  # Example for Amazon Linux 2
+  default     = "ami-05b10e08d247fb927"  # Example for Amazon Linux 2
 }
 
 variable "instance_type" {

@@ -1,0 +1,22 @@
+---
+- name: Install Poetry on EC2 instances
+  hosts: webservers
+  become: yes
+  tasks:
+    - name: Ensure Python 3 and pip are installed
+      package:
+        name:
+          - python3
+          - python3-pip
+        state: present
+
+    - name: Install Poetry using pip
+      command: python3 -m pip install --user poetry
+      creates: /home/ec2-user/.local/bin/poetry
+
+    - name: Add Poetry to PATH (if needed)
+      lineinfile:
+        path: ~/.bashrc
+        line: 'export PATH=$HOME/.local/bin:$PATH'
+        state: present
+      become_user: ec2-user

@@ -1,0 +1,9 @@
+---
+- name: Install Git on remote machine using dnf
+  hosts: webservers
+  become: yes  # Use 'become' if you need elevated privileges on the remote machine
+  tasks:
+    - name: Install Git using dnf
+      dnf:
+        name: git
+        state: present

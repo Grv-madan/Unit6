@@ -1,0 +1,11 @@
+---
+- name: Clone a Git repository to a remote machine
+  hosts: webservers
+  become: yes  # Use 'become' if you need elevated privileges on the remote machine
+  tasks:
+    - name: Clone the repository
+      git:
+        repo: 'https://github.com/rtzll/flask-todolist'  # Change to your repo URL
+        dest: /opt/todoapp  # Path where the repo should be cloned
+        version: main  # Branch to check out, you can change to 'master' or any branch you need
+        force: yes  # Optional: Will make sure the repo is freshly pulled if the destination already exists

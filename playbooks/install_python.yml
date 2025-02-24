@@ -10,7 +10,7 @@
       when: ansible_os_family == "Debian"  # For Ubuntu/Debian-based AMIs
 
     - name: Ensure python3 is installed (for Amazon Linux)
-      yum:
+      dnf:
         name: python3
         state: present
       when: ansible_os_family == "RedHat"  # For Amazon Linux/RHEL-based AMIs
@@ -22,7 +22,7 @@
       when: ansible_os_family == "Debian"  # For Ubuntu/Debian-based AMIs
 
     - name: Ensure pip3 is installed (for Amazon Linux)
-      yum:
+      dnf:
         name: python3-pip
         state: present
       when: ansible_os_family == "RedHat"  # For Amazon Linux/RHEL-based AMIs

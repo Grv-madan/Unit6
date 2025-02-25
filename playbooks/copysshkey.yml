@@ -1,0 +1,22 @@
+---
+- name: Copy .pem file to remote server and set permissions
+  hosts: webservers
+  become: yes
+  tasks:
+    - name: Ensure .ssh directory exists
+      ansible.builtin.file:
+        path: "/home/{{ ansible_user }}/.ssh"
+        state: directory
+        mode: '0700'
+    - name: Copy the .pem file to the remote server
+      ansible.builtin.copy:
+        src: .ssh/manaednodekey.pem  # Path to your local .pem file
+        dest: /home/{{ ansible_user }}/.ssh/manaednodekey.pem  # Destination path on the remote server
+        mode: '0600'  # Set the file permissions to 600 immediately on the remote server
+
+    - name: Ensure the correct permissions are set on the remote .pem file
+      ansible.builtin.file:
+        path: /home/{{ ansible_user }}/.ssh/manaednodekey.pem
+        owner: "{{ ansible_user }}"  # Use the correct owner (e.g., ec2-user)
+        group: "{{ ansible_user }}" 
+        mode: '0600'  # Ensure permissions are 600

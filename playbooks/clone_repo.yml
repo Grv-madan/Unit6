@@ -1,11 +1,21 @@
 ---
-- name: Clone a Git repository to a remote machine
+- name: Create a directory and perform tasks
   hosts: webservers
-  become: yes  # Use 'become' if you need elevated privileges on the remote machine
+  become: yes  # Use 'become' if elevated privileges are needed on the remote machine
   tasks:
+    - name: Ensure the directory exists
+      file:
+        path: /flask/todo
+        state: directory
+        mode: '0755'
+
     - name: Clone the repository
       git:
-        repo: 'https://github.com/rtzll/flask-todolist'  # Change to your repo URL
-        dest: /opt/todoapp  # Path where the repo should be cloned
-        version: main  # Branch to check out, you can change to 'master' or any branch you need
-        force: yes  # Optional: Will make sure the repo is freshly pulled if the destination already exists
+        repo: 'https://github.com/rtzll/flask-todolist.git'
+        dest: /flask/todo
+        version: main  # or master, depending on the branch you want to clone
+
+    - name: Checkout the correct branch (if needed)
+      command: git checkout --force main
+      args:
+        chdir: /flask/todo

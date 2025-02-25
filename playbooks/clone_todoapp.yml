@@ -1,0 +1,22 @@
+---
+- name: Checkout To-Do App code into /opt/todoapp
+  hosts: all
+  become: true  # Use become if you need sudo privileges for the directory
+  vars:
+    repo_url: "https://github.com/yourusername/todoapp.git"  # Replace with your repository URL
+    branch_name: "master"  # Replace with the branch name you want to checkout
+
+  tasks:
+    - name: Ensure /opt/todoapp directory exists
+      ansible.builtin.file:
+        path: /opt/todoapp
+        state: directory
+        mode: '0755'
+
+    - name: Clone the To-Do app repository and checkout the branch
+      ansible.builtin.git:
+        repo: "https://github.com/rtzll/flask-todolist.git"
+        dest: /opt/todoapp
+        version: "master"  # Checkout the specified branch
+        update: yes  # Pull the latest changes if the repo already exists
+        force: yes   # Overwrite any changes in the target directory

@@ -1,0 +1,17 @@
+---
+- name: Install Python dependencies for To-Do app
+  hosts: all
+  become: true  # Use sudo if necessary
+  vars:
+    app_dir: /opt/todoapp  # Path to your app directory containing requirements.txt
+  tasks:
+    - name: Ensure /opt/todoapp directory exists
+      ansible.builtin.file:
+        path: "{{ app_dir }}"
+        state: directory
+
+    - name: Install Python packages from requirements.txt
+      ansible.builtin.pip:
+        requirements: "{{ app_dir }}/requirements.txt"
+        state: present
+        executable: pip3  # Install using pip3 globally

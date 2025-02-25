@@ -1,0 +1,59 @@
+---
+- name: Setup the To-Do App environment
+  hosts: all
+  become: yes  # Ensure elevated privileges for system-level tasks
+  vars_prompt:
+    - name: "trello_token"
+      prompt: "Enter the Trello API Token"
+      private: yes
+    - name: "trello_board_id"
+      prompt: "Enter the Trello Board ID"
+      default: "your_board_id"
+    - name: "db_host"
+      prompt: "Enter the database host"
+      default: "localhost"
+    - name: "db_port"
+      prompt: "Enter the database port"
+      default: "5432"
+    - name: "db_user"
+      prompt: "Enter the database user"
+      default: "todo_user"
+    - name: "db_password"
+      prompt: "Enter the database password"
+      private: yes
+    - name: "db_name"
+      prompt: "Enter the database name"
+      default: "todoapp_db"
+    - name: "flask_secret_key"
+      prompt: "Enter the Flask secret key"
+      private: yes
+
+  tasks:
+    # Step 1: Create the .env file from template
+    - name: Create the .env file from template
+      ansible.builtin.template:
+        src: "templates/.env.j2"  # Path to the template file
+        dest: "/opt/todoapp/.env"
+        mode: '0600'
+
+    # Step 2: Copy todoapp.service file to /etc/systemd/system/
+    - name: Copy todoapp.service file to /etc/systemd/system/
+      ansible.builtin.copy:
+        src: "todoapp.service"  # Path to the service file on the controller
+        dest: "/etc/systemd/system/todoapp.service"  # Path on the remote system
+        mode: '0644'  # Set appropriate permissions
+        owner: root  # Ensure root owns the file
+        group: root  # Ensure root group owns the file
+
+    # Step 3: Reload systemd to apply changes to the service file
+    - name: Reload systemd to apply changes
+      ansible.builtin.systemd:
+        daemon_reload: yes
+
+    # Step 4: Restart the todoapp service to pick up any changes
+    - name: Restart todoapp service
+      ansible.builtin.systemd:
+        name: todoapp  # Name of the service (as it's referenced in systemd)
+        state: restarted  # Restart the service to pick up changes
+        enabled: yes  # Ensure the service starts on boot
+

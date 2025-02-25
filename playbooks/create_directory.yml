@@ -1,0 +1,10 @@
+---
+- name: Create /opt/todoapp directory
+  hosts: webservers
+  become: true  # If you need root privileges to create the directory
+  tasks:
+    - name: Ensure /opt/todoapp directory exists
+      ansible.builtin.file:
+        path: /opt/todoapp
+        state: directory
+        mode: '0755'  # Set permissions (optional, can be adjusted as needed)

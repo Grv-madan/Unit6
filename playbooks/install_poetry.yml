@@ -9,10 +9,13 @@
           - python3
           - python3-pip
         state: present
-
-    - name: Install Poetry using pip
-      command: python3 -m pip install --user poetry
-      creates: /home/ec2-user/.local/bin/poetry
+    - name: Ensure Poetry is installed via pip
+      ansible.builtin.pip:
+        name: poetry
+        state: present
+        executable: pip3  # Adjust pip version if necessary
+        # Optionally, use `creates` to check if Poetry is already installed
+        creates: /usr/local/bin/poetry  # Path to the poetry binary; adjust as needed
 
     - name: Add Poetry to PATH (if needed)
       lineinfile:

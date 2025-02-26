@@ -1,0 +1,4 @@
+trello_token: fb3ffa4cf5cf17ddbf948f0dcb95b83b
+trello_board_id: MoDUbKVK
+db_host: localhost
+db_port: 5432
